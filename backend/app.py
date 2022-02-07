@@ -365,7 +365,7 @@ class get_db_data2(Resource):
 
 
 api.add_resource(health, '/health')
-api.add_resource(send_data_to_kafka, '/tweets')
+# api.add_resource(send_data_to_kafka, '/tweets')
 api.add_resource(get_data_from_kafka, '/show')
 api.add_resource(twitter_to_kafka, '/twitter_to_kafka')
 api.add_resource(test_mongodb, '/test_mongo')
@@ -375,7 +375,7 @@ api.add_resource(kafka_to_mongodb, '/kafka_to_mongodb')
 api.add_resource(get_db_data1, '/get_db_data1')
 api.add_resource(get_db_data2, '/get_db_data2')
 api.add_resource(get_db_data3, '/get_db_data3')
-api.add_resource(apply_sentiment, '/apply_sentiment')
+# api.add_resource(apply_sentiment, '/apply_sentiment')
 
 producer = KafkaProducer(
     bootstrap_servers=bootstrap_servers,
