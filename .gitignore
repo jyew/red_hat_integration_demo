@@ -1,3 +1,22 @@
 
 sample.md
 backend/kaf/
+backend/ci/
+venv/
+*.pyc
+__pycache__/
+instance/
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+.idea/
+*.swp
+*~
+
+.vscode/
+
+.env

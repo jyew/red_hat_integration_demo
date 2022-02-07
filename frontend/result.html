@@ -1,0 +1,364 @@
+<html>
+
+<head>
+    <title>Red Hat Integration Demo</title>
+    <link rel="stylesheet" href="index.css">
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+        integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+</head>
+
+<body>
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+
+    <!--  <button id='TwitterToKafka' onclick="TwitterToKafka()">Twitter To Kafka</button> -->
+
+    <div class="twoToneCenter">
+    </div>
+
+    <button id='TwitterToKafka' onclick="TwitterToKafka()">
+        <h4>Twitter to Kafka</h4>
+    </button>
+    <button id='KafkaToMongoDB' onclick="KafkaToMongo()">
+        <h4>Kafka to MongoDB</h4>
+    </button>
+    <!-- <button id='SentimentAnalysis' onclick="SentimentAnalysis()">
+        <h2>Sentiment Analysis</h2>
+    </button> -->
+    <button id='RenderChart' onclick="renderChart()">
+        <h4>Render Chart</h4>
+    </button>
+    <button id='RenderChart2' onclick="renderStackedChart()">
+        <h4>Sentiment Analysis Chart</h4>
+    </button>
+    <button id='RenderTweets' >
+        <h4>Get Latest Tweets</h4>
+    </button>
+    <button id='StopRendering' onclick="stopChartRendering()">
+        <h4>Stop Rendering</h4>
+    </button>
+
+
+    <br><br><br>
+
+    <div class="container">
+        <div class="row" style="width: 100%; height: 1100px; overflow-y: scroll;">
+          <div class="col">
+            <div id="container" style="width: 100%;">
+                <canvas id="canvas"></canvas>
+            </div>
+
+            <div id="container" style="width: 100%;">
+                <canvas id="Stackchart"></canvas>
+            </div>
+          </div>
+          <div class="col">
+
+                <!-- bootstrap news update list <div class="row d-flex justify-content-center mt-100 mb-100">--> 
+                <div class="row d-flex justify-content-center mt-100 mb-100">
+                    <div class="col-lg-10">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h4 class="card-title m-b-0">Latest Tweets</h4>
+                            </div>
+                            <ul class="list-style-none" id="tweets-ul">
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+          </div>
+        </div>
+
+    </div>
+
+</body>
+<script>
+    var urlParams = new URLSearchParams(location.search);
+    var keyword = urlParams.get('keyword');
+    keyword = keyword.split(',')
+    var keywordString = ''
+    for (let i = 0; i < keyword.length; i++) {
+        if (i === 0) {
+            keywordString = `?keyword=${keyword[i].trim()}`
+        } else {
+            keywordString += `&keyword=${keyword[i].trim()}`
+        }
+    }
+    console.log(keywordString)
+    //var topic = urlParams.get('topic');
+    
+    var topic = 'tweets';
+    
+    //document.write(keyword);
+    //document.write(topic);
+    var url = 'http://cloud-native-python-example-app-amq-streams.apps.cluster-4375.4375.sandbox1652.opentlc.com'
+    //var url = 'http://localhost:8080'
+    var color = Chart.helpers.color
+    var interval1, interval2, interval3, interval4
+
+    var barChartData = {
+        labels: [],
+        datasets: [{
+            label: 'Occurence of Keywords',
+            backgroundColor: color('#ff0000').alpha(0.5).rgbString(),
+            borderColor: '#ccc',
+            borderWidth: 1,
+            barPercentage: 0.5,
+            barThickness: 2,
+            maxBarThickness: 4,
+            minBarLength: 1,
+            data: []
+        }]
+    };
+
+    // Stacked Graph
+    var stackChartData = {
+        data: {
+            labels: ['Risk Level'],
+            datasets: [
+                {
+                    label: 'Low',
+                    data: [67.8],
+                    backgroundColor: '#D6E9C6',
+                },
+                {
+                    label: 'Moderate',
+                    data: [20.7],
+                    backgroundColor: '#FAEBCC',
+                },
+                {
+                    label: 'High',
+                    data: [11.4],
+                    backgroundColor: '#EBCCD1',
+                }
+            ]
+        }
+    };
+
+    function TwitterToKafka() {
+        let xml = new XMLHttpRequest()
+        xml.open("GET", `${url}/twitter_to_kafka${keywordString}&topic=${topic}&seconds=10`, true);
+        xml.onload = function (event) {
+            console.log(event);
+        };
+        xml.send()
+    }
+
+    function SentimentAnalysis() {
+        let xml = new XMLHttpRequest()
+        xml.open("GET", `${url}/SentimentAnalysis${keywordString}&topic=${topic}`, true);
+        xml.onload = function (event) {
+            console.log(event);
+        };
+        xml.send()
+    }
+
+    function KafkaToMongoLoop() {
+        KafkaToMongo()
+        interval3 = setInterval(function () {
+            KafkaToMongo()
+        }, 10000)
+    }    
+
+    function KafkaToMongo() {
+        let xml = new XMLHttpRequest()
+        xml.open("GET", `${url}/kafka_to_mongodb${keywordString}&topic=${topic}`, true);
+        xml.onload = function (event) {
+            console.log(event);
+        };
+        xml.send()
+    }
+    /*
+    function TwitterToKafka() {
+        var twoToneButton = document.querySelector('.twoToneButton');
+        twoToneButton.addEventListener("click", function() {
+        twoToneButton.innerHTML = "Fetching Tweets";
+        twoToneButton.classList.add('spinning');
+        let xml = new XMLHttpRequest()
+        xml.open("GET", `${url}/TwitterToKafka`, true);
+        xml.onload = function (event) {
+            console.log(event);
+        };
+        xml.send()
+        /*setTimeout( 
+            function  (){  
+                twoToneButton.classList.remove('spinning');
+                twoToneButton.innerHTML = "Sign In";
+                
+            }, 6000); 
+    }, false); */
+    /*    
+        function KafkaToMongo() {
+            var twoToneButton = document.querySelector('.twoToneButton');
+            twoToneButton.addEventListener("click", function() {
+            twoToneButton.innerHTML = "Ingesting data to MongoDB";
+            twoToneButton.classList.add('spinning');
+            let xml = new XMLHttpRequest()
+            xml.open("GET", `${url}/KafkaToMongoDB`, true);
+            xml.onload = function (Event) {
+                console.log(event);
+            };
+            xml.send()
+        }, false);
+    }; */
+
+    function renderStackedChart() {
+        sentimentAnalysisRendering()
+        interval1 = setInterval(function () {
+            sentimentAnalysisRendering()
+        }, 5000)
+    }
+
+    function renderChart() {
+        kafkaMongoRendering()
+        interval2 = setInterval(function () {
+            kafkaMongoRendering()
+        }, 5000)
+    }
+
+    function renderLatestTweets() {
+        tweetsRendering()
+        interval4 = setInterval(function () {
+            tweetsRendering()
+        }, 5000)
+    }
+
+    function kafkaMongoRendering() {
+        console.log('jordan: hi')
+        let response = {}
+        let xml = new XMLHttpRequest()
+        xml.open("GET", `${url}/get_db_data1${keywordString}&topic=${topic}`, true);
+        xml.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                response = JSON.parse(this.responseText)
+                barChartData.labels = response.labels
+                barChartData.datasets[0].data = response.values
+                var ctx = document.getElementById('canvas').getContext('2d');
+                window.myBar = new Chart(ctx, {
+                    type: 'bar',
+                    data: barChartData,
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Tweets Keyword Counter'
+                        }
+                    }
+                });
+            }
+        }
+        xml.send()
+    }
+
+    function sentimentAnalysisRendering() {
+        let response = {}
+        let xml = new XMLHttpRequest()
+        xml.open("GET", `${url}/get_db_data2${keywordString}&topic=${topic}`, true);
+        xml.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                response = JSON.parse(this.responseText)
+                stackChartData = response
+                //stackChartData.datasets[0].data = response.values
+                var ctx = document.getElementById('Stackchart').getContext('2d');
+                window.myBar2 = new Chart(ctx, {
+                    type: 'bar',
+                    data: stackChartData,
+                    options: {
+                        scales: {
+                            xAxes: [{ stacked: true }],
+                            yAxes: [{ stacked: true }]
+                        },
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Sentiment Analysis of Tweets'
+                        }
+                    }
+                });
+            }
+        }
+        xml.send()
+    }   
+
+
+    $(document).ready(function(){
+        $("#RenderTweets").click(function(){
+            renderLatestTweets();
+        });
+    });
+
+    function tweetsRendering() {
+
+        let response = {}
+        let xml = new XMLHttpRequest()
+        xml.open("GET", `${url}/get_db_data1${keywordString}`, true);
+        xml.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                response = JSON.parse(this.responseText)
+
+                // clear previous data
+                $("#tweets-ul").empty();
+                tweetsData = response.messages
+                tweetsData.forEach(tweet => {
+                    parsed_tweet = JSON.parse(tweet)
+                    $("#tweets-ul").append('<li class="d-flex no-block card-body"> <i class="fa fa-check-circle w-30px m-t-5"></i>' +
+                        '<div>' + parsed_tweet.keyword + ': <span class="text-muted">' + parsed_tweet.tweet + '</span> </div>' +
+                        '<p> Datetime: <span class="text-muted">' + parsed_tweet.created_at.$date + '</span> </p>' +
+                    '</li>'
+                    ); 
+                });
+            }
+        }
+        xml.send()
+    }
+
+
+
+    function stopChartRendering() {
+        clearInterval(interval1)
+        clearInterval(interval2)
+        clearInterval(interval3)
+        clearInterval(interval4)
+    }
+
+    window.onload = function () {
+        var ctx = document.getElementById('canvas').getContext('2d');
+        window.myBar = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Tweets Keyword Counter'
+                }
+            }
+        });
+    }
+
+
+</script>
+
+</html>
