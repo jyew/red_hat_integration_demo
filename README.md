@@ -82,8 +82,7 @@ oc adm policy add-scc-to-user anyuid -z default
 
 ```
 oc new-app --name=backend --image=jyew1992/kafka-demo-backend-service:latest --env IS_KAFKA_SSL='False' --env MONGODB_ENDPOINT='mongodb:27017' --env KAFKA_BOOTSTRAP_ENDPOINT='my-cluster-kafka-bootstrap:9092' --env 'KAFKA_TOPIC=tweets' --env TWTR_CONSUMER_KEY='<YOUR_KEY_HERE>' --env TWTR_CONSUMER_SECRET='<YOUR_KEY_HERE>' --env TWTR_ACCESS_TOKEN='<YOUR_KEY_HERE>' --env TWTR_ACCESS_TOKEN_SECRET='<YOUR_KEY_HERE>' --env 
-MONGODB_DATABASE='twitter_stream' --env
-MONGODB_HOST='mongodb' --env MONGODB_PORT=27017 --env MONGODB_USER='demo' --env MONGODB_PASSWORD='demo' --env MONGODB_DB_NAME='twitter_stream' -o yaml > 02-backend.yaml
+MONGODB_HOST='mongodb' --env MONGODB_PORT=27017 --env MONGODB_USER='demo' --env MONGODB_PASSWORD='demo' --env MONGODB_DATABASE='twitter_stream' -o yaml > 02-backend.yaml
 ```
 ```
 oc apply -f 02-backend.yaml ; oc expose svc/backend
