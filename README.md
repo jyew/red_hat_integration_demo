@@ -1,6 +1,6 @@
 # Red Hat Integration Suite Demo with Twitter and Nvidia Triton Sentiment Model
 
-Pre-requisite: You must have an OpenShift Container Platform with sufficient administrative rights to install operators, create projects and configure workloads. The following demo is based on Openshift 4.8.
+Pre-requisite: You must have an OpenShift Container Platform with sufficient administrative rights to install operators, create projects and configure workloads. The following demo is based on Openshift 4.8. You also need to have a developer account in Twitter.
 
 Red Hat Integration is a comprehensive set of integration and messaging technologies to connect applications and data across hybrid infrastructures. 
 
@@ -8,7 +8,7 @@ It is an agile, distributed, containerized and API-centric solution.
 
 It provides service composition and orchestration, application connectivity and data transformation, real-time message streaming, change data capture, and API management—all combined with a cloud-native platform and toolchain to support the full spectrum of modern application development.
 
-This repo is with reference to https://github.com/ksingh7/twitter_streaming_app_on_openshift_OCS with some updated codes and modification. 
+This repo is with reference to https://github.com/ksingh7/twitter_streaming_app_on_openshift_OCS with some updated codes and modification. Give credits to Karan Singh.
 
 ## Instruction
 
@@ -64,15 +64,55 @@ oc new-app -n amq-streams --name=mongodb --template=mongodb-persistent-ocs \
 
 ### Deploy Triton Sentiment Inference Service
 
+1. Create persistent volume claim
+
+2. Deploy a triton APP
 
 
 ### Deploy Python Backend Flask API service
 
+1. Allow container to run as root
 
+```
+oc adm policy add-scc-to-user anyuid -z default
 
+```
+
+2. Deploy backend API APP
+
+```
+oc new-app --name=backend --image=jyew1992/kafka-demo-backend-service:latest --env IS_KAFKA_SSL='False' --env MONGODB_ENDPOINT='mongodb:27017' --env KAFKA_BOOTSTRAP_ENDPOINT='my-cluster-kafka-bootstrap:9092' --env 'KAFKA_TOPIC=tweets' --env TWTR_CONSUMER_KEY='<YOUR_KEY_HERE>' --env TWTR_CONSUMER_SECRET='<YOUR_KEY_HERE>' --env TWTR_ACCESS_TOKEN='<YOUR_KEY_HERE>' --env TWTR_ACCESS_TOKEN_SECRET='<YOUR_KEY_HERE>' --env MONGODB_HOST='mongodb' --env MONGODB_PORT=27017 --env MONGODB_USER='demo' --env MONGODB_PASSWORD='demo' --env MONGODB_DB_NAME='twitter_stream' -o yaml > 02-backend.yaml
+```
+```
+oc apply -f 02-backend.yaml ; oc expose svc/backend
+
+```
 
 ### Deploy Frontend Service
 
+1. Grab the backend route
+
+```
+oc get route backend --no-headers | awk '{print $2}'
+```
+
+2. Edit results.html, Line-62 ``var url`` and update route
+
+3. Build Frontend Docker image
+
+```
+cd frontend
+
+docker build -t kafka-demo-frontend-service:latest .
+docker tag kafka-demo-frontend-service:latest jyew1992/kafka-demo-frontend-service:latest
+docker push jyew1992/kafka-demo-frontend-service
+
+```
+
+
+```
+oc new-app --name=frontend --docker-image=jyew1992/kafka-demo-frontend-service:latest ; oc expose svc/frontend ; oc get route frontend
+```
 
 ### 3scale to protect API
 
