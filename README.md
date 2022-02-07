@@ -96,7 +96,7 @@ oc apply -f 02-backend.yaml ; oc expose svc/backend
 oc get route backend --no-headers | awk '{print $2}'
 ```
 
-2. Edit results.html, Line-62 ``var url`` and update route
+2. Edit frontend/results.html, Line-107 ``var url`` and update route
 
 3. Build Frontend Docker image
 
@@ -106,12 +106,9 @@ cd frontend
 docker build -t kafka-demo-frontend-service:latest .
 docker tag kafka-demo-frontend-service:latest jyew1992/kafka-demo-frontend-service:latest
 docker push jyew1992/kafka-demo-frontend-service
-
 ```
-
-
 ```
-oc new-app --name=frontend --docker-image=jyew1992/kafka-demo-frontend-service:latest ; oc expose svc/frontend ; oc get route frontend
+oc new-app --name=frontend --image=jyew1992/kafka-demo-frontend-service:latest ; oc expose svc/frontend ; oc get route frontend
 ```
 
 ### 3scale to protect API
