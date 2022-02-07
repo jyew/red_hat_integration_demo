@@ -32,9 +32,35 @@ Inside the operator, click "Kafka topic" -> "Create kafkaTopic". Name the topic 
 
 ### Deploy a MongoDB service on openshift
 
+1. Login to your OCS cli
 
+```
+oc login --token=<your-token> --server=<your-server>
+oc project amq-streams
+```
 
+2. Git clone application repository
 
+```
+git clone https://github.com/jyew/red_hat_integration_demo.git
+cd red_hat_integration_demo
+```
+
+3. Create MongoDB template
+```
+oc create -f 01-ocs-mongodb-persistent-template.yaml -n openshift
+oc -n openshift get template mongodb-persistent-ocs
+```
+
+4. Create MongoDB app
+
+```
+oc new-app -n amq-streams --name=mongodb --template=mongodb-persistent-ocs \
+    -e MONGODB_USER=demo \
+    -e MONGODB_PASSWORD=demo \
+    -e MONGODB_DATABASE=twitter_stream \
+    -e MONGODB_ADMIN_PASSWORD=admin
+```
 
 ### Deploy Triton Sentiment Inference Service
 
