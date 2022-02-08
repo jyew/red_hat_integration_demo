@@ -67,7 +67,9 @@ oc new-app -n amq-streams --name=mongodb --template=mongodb-persistent-ocs \
 
 1. Create persistent volume claim
 
-On OCS, click "Storage" -> "PersistentVolumeClaims" -> "Create PersistentVolumeClaim". Name it as "triton-storage-claim" and allocate 1GB of size to it.
+On OCS, click "Storage" -> "PersistentVolumeClaims" -> "Create PersistentVolumeClaim". 
+
+Name it as "triton-storage-claim" and allocate 1GB of size to it.
 
 2. Deploy a triton APP
 ```
