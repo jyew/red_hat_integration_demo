@@ -64,10 +64,23 @@ oc new-app -n amq-streams --name=mongodb --template=mongodb-persistent-ocs \
 
 ### Deploy Triton Sentiment Inference Service
 
+
 1. Create persistent volume claim
 
-2. Deploy a triton APP
+On OCS, click "Storage" -> "PersistentVolumeClaims" -> "Create PersistentVolumeClaim". Name it as "triton-storage-claim" and allocate 1GB of size to it.
 
+2. Deploy a triton APP
+```
+oc apply -f tritonapp.yaml -n amq-streams 
+```
+
+3. Download models to persistent volume
+```
+wget https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip 
+```
+```
+unzip models/model_repository.zip -d models
+```
 
 ### Deploy Python Backend Flask API service
 
