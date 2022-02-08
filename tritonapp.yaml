@@ -53,6 +53,10 @@ items:
         labels:
           deployment: tritonserver
       spec:
+        volumes:
+          - name: triton-pv-storage
+            persistentVolumeClaim:
+              claimName: triton-storage-claim
         containers:
         - image: ' '
           name: tritonserver
@@ -60,6 +64,9 @@ items:
           command:
             - tritonserver
             - '--model-repository=/models'
+          volumeMounts:
+          - mountPath: "/models"
+            name: triton-pv-storage
   status: {}
 kind: List
 metadata: {}
