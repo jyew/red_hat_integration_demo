@@ -1,0 +1,65 @@
+apiVersion: v1
+items:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: tritonserver
+      app.kubernetes.io/component: tritonserver
+      app.kubernetes.io/instance: tritonserver
+    name: tritonserver
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: nvcr.io/nvidia/tritonserver:21.12-py3
+      from:
+        kind: DockerImage
+        name: nvcr.io/nvidia/tritonserver:21.12-py3
+      generation: null
+      importPolicy: {}
+      name: 21.12-py3
+      referencePolicy:
+        type: ""
+  status:
+    dockerImageRepository: ""
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"tritonserver:21.12-py3"},"fieldPath":"spec.template.spec.containers[?(@.name==\"tritonserver\")].image"}]'
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: tritonserver
+      app.kubernetes.io/component: tritonserver
+      app.kubernetes.io/instance: tritonserver
+    name: tritonserver
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        deployment: tritonserver
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          deployment: tritonserver
+      spec:
+        containers:
+        - image: ' '
+          name: tritonserver
+          resources: {}
+          command:
+            - tritonserver
+            - '--model-repository=/models'
+  status: {}
+kind: List
+metadata: {}
