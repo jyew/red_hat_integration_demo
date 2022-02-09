@@ -1,4 +1,4 @@
-# Red Hat Integration Suite Demo with Twitter and Nvidia Triton Sentiment Model
+# Red Hat Integration Suite Demo with Twitter and Nvidia Nemo Sentiment Model
 
 Pre-requisite: You must have an OpenShift Container Platform with sufficient administrative rights to install operators, create projects and configure workloads. The following demo is based on Openshift 4.8. You also need to have a developer account in Twitter.
 
@@ -62,7 +62,7 @@ oc new-app -n amq-streams --name=mongodb --template=mongodb-persistent-ocs \
     -e MONGODB_ADMIN_PASSWORD=admin
 ```
 
-### Deploy Triton Sentiment Inference Service
+<!-- ### Deploy Triton Sentiment Inference Service
 
 
 1. Create persistent volume claim
@@ -82,7 +82,26 @@ wget https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip
 ```
 ```
 unzip models/model_repository.zip -d models
+``` -->
+### Deploy Nemo Sentiment Microservice
+
+1. Create persistent volume claim
+
+On OCS, click "Storage" -> "PersistentVolumeClaims" -> "Create PersistentVolumeClaim". 
+
+Name it as "nemo-storage-claim" and allocate 2GB of size to it.
+
+2. Deploy Nemo Sentiment service
 ```
+oc apply -f nemoapp.yaml -n amq-streams 
+```
+3. Download model to persistent volume
+```
+wget https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip 
+```
+```
+unzip models/model_repository.zip -d models
+``
 
 ### Deploy Python Backend Flask API service
 
