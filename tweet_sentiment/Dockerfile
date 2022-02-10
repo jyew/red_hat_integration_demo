@@ -12,6 +12,8 @@ RUN pip install --upgrade pip \
   && apt-get clean \
   && apt-get update \
   && apt-get install -y libsndfile1 ffmpeg \
+  && apt-get install gcc \
+  && apt-get install g++ \
   && pip install --upgrade -r /opt/microservices/requirements.txt
 
 USER 1001
