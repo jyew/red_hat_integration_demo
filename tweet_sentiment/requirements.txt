@@ -6,3 +6,4 @@ pandas
 onnxruntime
 Cython
 nemo_toolkit
+braceexpand
