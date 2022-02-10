@@ -7,6 +7,11 @@ COPY requirements.txt /opt/microservices/
 
 COPY requirements.txt requirements.txt
 
+WORKDIR /root
+
+#ENV TRANSFORMERS_CACHE="/root/cache/hf_cache_home" 
+ENV HF_HOME="/root/cache/hf_cache_home" 
+
 RUN pip install --upgrade pip \
   && pip install --upgrade pipenv \
   && apt-get clean \
