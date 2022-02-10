@@ -4,5 +4,5 @@ Flask-RESTful
 flask-restplus
 pandas
 onnxruntime
-# Cython
-# nemo_toolkit[all]
+Cython
+nemo_toolkit[all]
