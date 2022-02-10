@@ -5,5 +5,4 @@ flask-restplus
 pandas
 onnxruntime
 Cython
-nemo_toolkit
-braceexpand
+nemo_toolkit[all]
