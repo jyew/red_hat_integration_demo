@@ -11,6 +11,7 @@ RUN pip install --upgrade pip \
   && pip install --upgrade pipenv \
   && apt-get clean \
   && apt-get update \
+  && apt-get install -y libsndfile1 ffmpeg \
   && pip install --upgrade -r /opt/microservices/requirements.txt
 
 USER 1001
