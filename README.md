@@ -91,14 +91,27 @@ On OCS, click "Storage" -> "PersistentVolumeClaims" -> "Create PersistentVolumeC
 
 Name it as "nemo-storage-claim" and allocate 2GB of size to it.
 
-2. Deploy Nemo Sentiment service
+2. Allow container to run as root
+
 ```
-oc apply -f nemoapp.yaml -n amq-streams 
+oc adm policy add-scc-to-user anyuid -z default
+
 ```
-3. Download model to persistent volume
+
+3. Deploy Nemo Sentiment service
+```
+oc new-app https://github.com/jyew/red_hat_integration_demo.git \
+    --context-dir=tweet_sentiment -n amq-streams --name=sentiment
+```
+
+Set Volume
+
+4. Download model to persistent volume
+
 ```
 wget https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip 
 ```
+
 ```
 unzip models/model_repository.zip -d models
 ``
