@@ -8,6 +8,7 @@ from nemo.collections import nlp as nemo_nlp
 from nemo.collections.nlp.parts.utils_funcs import tensor2list
 from nemo.collections.nlp.models.text_classification import TextClassificationModel
 from nemo.collections.nlp.data.text_classification import TextClassificationDataset
+from pathlib import Path
 import numpy as np
 import torch
 import onnxruntime
@@ -21,9 +22,10 @@ parser = reqparse.RequestParser()
 checkpointPath = 'model_repository/TextClassification--val_loss=0.4835-epoch=4-last.ckpt'
 modelPath = 'model_repository/sentiment_onnx/1/model.onnx'
 
-model = nemo_nlp.models.TextClassificationModel.load_from_checkpoint(checkpoint_path=checkpointPath)
-model.eval()
-ort_session = onnxruntime.InferenceSession(modelPath)
+if Path(checkpointPath).is_file():
+    model = nemo_nlp.models.TextClassificationModel.load_from_checkpoint(checkpoint_path=checkpointPath)
+    model.eval()
+    ort_session = onnxruntime.InferenceSession(modelPath)
 
 def to_numpy(tensor):
     return tensor.detach().cpu().numpy() if tensor.requires_grad else tensor.cpu().numpy()
