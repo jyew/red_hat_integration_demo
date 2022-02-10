@@ -1,0 +1,8 @@
+Flask
+Flask-Cors
+Flask-RESTful
+flask-restplus
+pandas
+onnxruntime
+Cython
+nemo_toolkit['all']
