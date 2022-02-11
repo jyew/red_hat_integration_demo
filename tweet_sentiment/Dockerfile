@@ -8,6 +8,7 @@ COPY requirements.txt /opt/microservices/
 COPY requirements.txt requirements.txt
 
 # WORKDIR /root
+RUN mkdir -p /opt/cache/tf_cache_home
 
 ENV TRANSFORMERS_CACHE="/opt/cache/tf_cache_home" 
 # ENV HF_HOME="/root/cache/hf_cache_home" 
