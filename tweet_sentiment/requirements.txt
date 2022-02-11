@@ -6,3 +6,6 @@ pandas
 onnxruntime
 Cython
 nemo_toolkit[all]
+librosa==0.6.0
+numba==0.43.0
+llvmlite==0.32.1
