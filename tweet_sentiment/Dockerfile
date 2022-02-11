@@ -14,7 +14,7 @@ ENV TRANSFORMERS_CACHE="/opt/cache/tf_cache_home"
 # && rm <copy_directory>/<filename>.zip
 WORKDIR /opt/microservices/
 
-RUN wget https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip \
+RUN curl https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip \
   && unzip model_repository.zip -d model_repository \
   && rm model_repository.zip \
   && mkdir -p /opt/cache/tf_cache_home \
