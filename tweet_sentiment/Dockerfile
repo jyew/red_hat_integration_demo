@@ -4,14 +4,8 @@ COPY * /opt/microservices/
 COPY requirements.txt /opt/microservices/
 COPY requirements.txt requirements.txt
 
-# RUN mkdir -p /opt/cache/tf_cache_home
-# RUN mkdir -p /opt/cache/nemo_nlp_tmp
-
 ENV TRANSFORMERS_CACHE="/opt/cache/tf_cache_home" 
 
-# RUN curl <file_download_url> -O <copy_directory> \
-# && unzip <copy_directory>/<filename>.zip -d <copy_directory> \
-# && rm <copy_directory>/<filename>.zip
 WORKDIR /opt/microservices/
 
 RUN apt-get clean \

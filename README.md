@@ -62,27 +62,6 @@ oc new-app -n amq-streams --name=mongodb --template=mongodb-persistent-ocs \
     -e MONGODB_ADMIN_PASSWORD=admin
 ```
 
-<!-- ### Deploy Triton Sentiment Inference Service
-
-
-1. Create persistent volume claim
-
-On OCS, click "Storage" -> "PersistentVolumeClaims" -> "Create PersistentVolumeClaim". 
-
-Name it as "triton-storage-claim" and allocate 1GB of size to it.
-
-2. Deploy a triton APP
-```
-oc apply -f tritonapp.yaml -n amq-streams 
-```
-
-3. Download models to persistent volume
-```
-wget https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip 
-```
-```
-unzip models/model_repository.zip -d models
-``` -->
 ### Deploy Nemo Sentiment Microservice
 
 1. Create persistent volume claim
@@ -91,30 +70,19 @@ On OCS, click "Storage" -> "PersistentVolumeClaims" -> "Create PersistentVolumeC
 
 Name it as "nemo-storage-claim" and allocate 2GB of size to it.
 
-2. Allow container to run as root
-
-```
-oc adm policy add-scc-to-user anyuid -z default
-
-```
-
-3. Deploy Nemo Sentiment service
+2. Deploy Nemo Sentiment service
 ```
 oc new-app https://github.com/jyew/red_hat_integration_demo.git \
     --context-dir=tweet_sentiment -n amq-streams --name=sentiment
 ```
 
-Set Volume
-
-4. Download model to persistent volume
-
+3. Mount persistent volume and expose it
 ```
-wget https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip 
+oc set volume deploy/sentiment --add --name=v1 -t pvc --claim-name=nemo-storage-claim --overwrite
 ```
-
 ```
-unzip models/model_repository.zip -d models
-``
+oc expose svc/sentiment
+```
 
 ### Deploy Python Backend Flask API service
 
@@ -122,7 +90,6 @@ unzip models/model_repository.zip -d models
 
 ```
 oc adm policy add-scc-to-user anyuid -z default
-
 ```
 
 2. Deploy backend API APP
