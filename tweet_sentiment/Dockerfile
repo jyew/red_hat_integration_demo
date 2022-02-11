@@ -14,18 +14,20 @@ ENV TRANSFORMERS_CACHE="/opt/cache/tf_cache_home"
 # && rm <copy_directory>/<filename>.zip
 WORKDIR /opt/microservices/
 
-RUN curl https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip \
+RUN apt-get clean \
+  && apt-get update \
+  && apt-get install -y libsndfile1 ffmpeg \
+  && apt-get install build-essential -y \
+  && apt-get -y install gcc \
+  && apt-get -y install wget unzip && rm -rf /var/cache/apk/* \
+  && curl https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip \
   && unzip model_repository.zip -d model_repository \
   && rm model_repository.zip \
   && mkdir -p /opt/cache/tf_cache_home \
   && mkdir -p /opt/cache/nemo_nlp_tmp \
   && pip install --upgrade pip \
   && pip install --upgrade pipenv \
-  && apt-get clean \
-  && apt-get update \
-  && apt-get install -y libsndfile1 ffmpeg \
-  && apt-get install build-essential -y \
-  && apt-get -y install gcc \
+
   && pip install --upgrade -r /opt/microservices/requirements.txt
 
 USER 1001
