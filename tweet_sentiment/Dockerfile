@@ -27,8 +27,8 @@ RUN apt-get clean \
   && mkdir -p /opt/cache/nemo_nlp_tmp \
   && pip install --upgrade pip \
   && pip install --upgrade pipenv \
-
-  && pip install --upgrade -r /opt/microservices/requirements.txt
+  && pip install --upgrade -r /opt/microservices/requirements.txt \
+  && chown 1001:1001 -R /opt/cache
 
 USER 1001
 
