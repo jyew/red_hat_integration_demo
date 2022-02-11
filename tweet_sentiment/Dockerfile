@@ -20,7 +20,7 @@ RUN apt-get clean \
   && apt-get install build-essential -y \
   && apt-get -y install gcc \
   && apt-get -y install wget unzip && rm -rf /var/cache/apk/* \
-  && curl https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip \
+  && wget https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip \
   && unzip model_repository.zip -d model_repository \
   && rm model_repository.zip \
   && mkdir -p /opt/cache/tf_cache_home \
