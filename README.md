@@ -1,5 +1,7 @@
 # Red Hat Integration Suite Demo with Twitter and Nvidia Nemo Sentiment Model
 
+![](img/Architecture.png)
+
 Pre-requisite: You must have an OpenShift Container Platform with sufficient administrative rights to install operators, create projects and configure workloads. The following demo is based on Openshift 4.8. You also need to have a developer account in Twitter.
 
 Red Hat Integration is a comprehensive set of integration and messaging technologies to connect applications and data across hybrid infrastructures. 
