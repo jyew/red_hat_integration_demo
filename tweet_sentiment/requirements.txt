@@ -5,8 +5,7 @@ flask-restplus
 pandas
 onnxruntime
 Cython
-nemo_toolkit[nlp]
+nemo_toolkit[all]
 librosa==0.6.0
 numba==0.48.0
 llvmlite<0.32.0
-fasttext
