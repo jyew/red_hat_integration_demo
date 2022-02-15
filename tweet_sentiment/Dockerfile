@@ -9,8 +9,11 @@ ENV TRANSFORMERS_CACHE="/opt/cache/tf_cache_home"
 WORKDIR /opt/microservices/
 
 RUN apt-get clean \
-  && apt-get update && apt-get install -y libsndfile1 ffmpeg \
+  && apt-get update \
   && apt-get install build-essential -y \
+  && apt-get -y install libsndfile1 \
+  && apt-get -y install libsndfile1-dev \
+  && apt-get -y install ffmpeg \
   && apt-get -y install gcc \
   && apt-get -y install wget unzip && rm -rf /var/cache/apk/* \
   && wget https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip \
