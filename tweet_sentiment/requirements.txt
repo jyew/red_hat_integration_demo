@@ -6,6 +6,7 @@ pandas
 onnxruntime
 Cython
 nemo_toolkit[all]
+SoundFile
 librosa==0.6.0
 numba
 llvmlite==0.32.1
