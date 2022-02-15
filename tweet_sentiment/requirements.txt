@@ -5,7 +5,7 @@ flask-restplus
 pandas
 onnxruntime
 Cython
-nemo_toolkit==1.6.1[all]
+nemo_toolkit==1.6.1
 librosa==0.6.0
 numba==0.48.0
 llvmlite<0.32.0
