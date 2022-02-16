@@ -339,21 +339,19 @@ class get_db_data2(Resource):
 class apply_sentiment(Resource):
     def get(self):
         collection = mongoclient[mongodb_db_name][mongodb_collection_name]
-        queries = [record['tweet'] for record in collection.find({})]
-        r = requests.post(sentiment_api, json={"queries": queries})
-        return r
-        # for record in collection.find({}):
-        #     print(record)
-        #     sentence = flair.data.Sentence(record['tweet'])
-        #     sentiment_model.predict(sentence)
-        #     collection.update_one({'_id':record['_id']},
-        #                         { "$set" : 
-        #                             {
-        #                                 'sentiment': sentence.labels[0].value, 
-        #                                 'confidence': sentence.labels[0].score
-        #                             } 
-        #                         })
-        # return 200
+        # queries = [record['tweet'] for record in collection.find({})]
+        # r = requests.post(sentiment_api, json={"queries": queries})
+        # return r
+        for record in collection.find({"sentiment": None}):
+            r = requests.post(sentiment_api, json={"queries": [record['tweet']]})
+            print(r)
+            collection.update_one({'_id':record['_id']},
+                                { "$set" : 
+                                    {
+                                        'sentiment': r.json().results[0]
+                                    } 
+                                })
+        return 200
 
 
 
