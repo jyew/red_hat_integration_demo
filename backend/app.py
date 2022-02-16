@@ -316,23 +316,23 @@ class get_db_data2(Resource):
         ]
 
         
-        # for keyCount, keyword in enumerate(track_keywords):
-        #     for sentiCount, sentiment in enumerate(sentiments):
-        #         count = collection.count_documents({"polarity": sentiment, "keyword": keyword})
-        #         data["datasets"][sentiCount]["data"].append(count)
+        for keyCount, keyword in enumerate(track_keywords):
+            for sentiCount, sentiment in enumerate(sentiments):
+                count = collection.count_documents({"sentiment": sentiment, "keyword": keyword})
+                data["datasets"][sentiCount]["data"].append(count)
 
         # randomly generate fake results when we don't have sentiment model yet
-        for keyword in track_keywords:
-            query = {"tweet": {"$regex": keyword, "$options": "gim"}}
-            count = collection.count_documents(query)
+        # for keyword in track_keywords:
+        #     query = {"tweet": {"$regex": keyword, "$options": "gim"}}
+        #     count = collection.count_documents(query)
 
-            count_positive = random.randint(0, count)
-            count_negative = random.randint(0, count - count_positive)
-            count_neutral = count - count_positive - count_negative
+        #     # count_positive = random.randint(0, count)
+        #     # count_negative = random.randint(0, count - count_positive)
+        #     count_neutral = count - count_positive - count_negative
 
-            data["datasets"][0]["data"].append(count_positive)
-            data["datasets"][1]["data"].append(count_negative)
-            data["datasets"][2]["data"].append(count_neutral)
+        #     data["datasets"][0]["data"].append(count_positive)
+        #     data["datasets"][1]["data"].append(count_negative)
+        #     data["datasets"][2]["data"].append(count_neutral)
         return data
 
 
