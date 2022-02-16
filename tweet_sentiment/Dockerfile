@@ -25,7 +25,7 @@ RUN apt-get clean \
   && pip install --upgrade pipenv \
   && pip install --upgrade -r /opt/microservices/requirements.txt \
   && chown 1001:1001 -R /opt/cache \ 
-  && chown 1001:1001 -R /opt/cache/tf_cache_home
+  && chmod -R 777 /opt/cache 
 
 USER 1001
 
