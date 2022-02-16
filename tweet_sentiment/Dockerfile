@@ -14,7 +14,7 @@ RUN apt-get clean \
   && apt-get -y install libsndfile1 \
   && apt-get -y install libsndfile1-dev \
   && apt-get -y install ffmpeg \
-  && apt-get -y install gcc gcc-c++ \
+  && apt-get -y install gcc \
   && apt-get -y install wget unzip && rm -rf /var/cache/apk/* \
   && wget https://jyewbucket.s3.ap-southeast-1.amazonaws.com/model_repository.zip \
   && unzip model_repository.zip -d model_repository \
