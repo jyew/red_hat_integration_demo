@@ -352,7 +352,7 @@ class apply_sentiment(Resource):
             collection.update_one({'_id':record['_id']},
                                 { "$set" : 
                                     {
-                                        'sentiment': r.json().results[0]
+                                        'sentiment': r.json()['results'][0]
                                     } 
                                 })
         return 200
