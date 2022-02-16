@@ -347,7 +347,7 @@ class apply_sentiment(Resource):
             data = {
                 "queries": [record['tweet']]
             }
-            r = requests.post(sentiment_api, json=data)
+            r = requests.post(sentiment_api + '/predict_sentiment', json=data)
             print(r)
             collection.update_one({'_id':record['_id']},
                                 { "$set" : 
