@@ -12,10 +12,6 @@ from json import loads
 from pymongo import MongoClient, DESCENDING
 from bson.objectid import ObjectId
 from bson import json_util
-# from nemo.utils import logging
-# from nemo.collections.nlp.parts.utils_funcs import tensor2list
-# from nemo.collections.nlp.models.text_classification import TextClassificationModel
-# from nemo.collections.nlp.data.text_classification import TextClassificationDataset
 import os
 import re
 import random
@@ -25,12 +21,8 @@ import tweepy
 import time
 import datetime
 import pprint
-# import flair
-# import numpy as np
-# import torch
+import requests
 
-
-# log.basicConfig(level=log.DEBUG)
 
 app = Flask(__name__)
 CORS(app)
@@ -47,6 +39,7 @@ consumer_key = os.environ['TWTR_CONSUMER_KEY']
 consumer_secret = os.environ['TWTR_CONSUMER_SECRET']
 access_token = os.environ['TWTR_ACCESS_TOKEN']
 access_token_secret = os.environ['TWTR_ACCESS_TOKEN_SECRET']
+sentiment_api = os.environ['SENTIMENT_ROUTE']
 
 # mongo credentials
 mongodb_user = os.environ['MONGODB_USER']
@@ -343,24 +336,24 @@ class get_db_data2(Resource):
         return data
 
 
-# # flair sentiment model
-# sentiment_model = flair.models.TextClassifier.load('en-sentiment')
-
-# class apply_sentiment(Resource):
-#     def get(self):
-#         collection = mongoclient[mongodb_db_name][mongodb_collection_name]
-#         for record in collection.find({}):
-#             print(record)
-#             sentence = flair.data.Sentence(record['tweet'])
-#             sentiment_model.predict(sentence)
-#             collection.update_one({'_id':record['_id']},
-#                                 { "$set" : 
-#                                     {
-#                                         'sentiment': sentence.labels[0].value, 
-#                                         'confidence': sentence.labels[0].score
-#                                     } 
-#                                 })
-#         return 200
+class apply_sentiment(Resource):
+    def get(self):
+        collection = mongoclient[mongodb_db_name][mongodb_collection_name]
+        queries = [record['tweet'] for record in collection.find({})]
+        r = requests.post(sentiment_api, json={"queries": queries})
+        return r
+        # for record in collection.find({}):
+        #     print(record)
+        #     sentence = flair.data.Sentence(record['tweet'])
+        #     sentiment_model.predict(sentence)
+        #     collection.update_one({'_id':record['_id']},
+        #                         { "$set" : 
+        #                             {
+        #                                 'sentiment': sentence.labels[0].value, 
+        #                                 'confidence': sentence.labels[0].score
+        #                             } 
+        #                         })
+        # return 200
 
 
 
