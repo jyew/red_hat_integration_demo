@@ -338,12 +338,16 @@ class get_db_data2(Resource):
 
 class apply_sentiment(Resource):
     def get(self):
+        print('sentiment triggered')
         collection = mongoclient[mongodb_db_name][mongodb_collection_name]
         # queries = [record['tweet'] for record in collection.find({})]
         # r = requests.post(sentiment_api, json={"queries": queries})
         # return r
         for record in collection.find({"sentiment": None}):
-            r = requests.post(sentiment_api, json={"queries": [record['tweet']]})
+            data = {
+                "queries": [record['tweet']]
+            }
+            r = requests.post(sentiment_api, json=data)
             print(r)
             collection.update_one({'_id':record['_id']},
                                 { "$set" : 
