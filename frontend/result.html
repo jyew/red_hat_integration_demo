@@ -34,14 +34,14 @@
     <button id='KafkaToMongoDB' onclick="KafkaToMongo()">
         <h4>Kafka to MongoDB</h4>
     </button>
-    <!-- <button id='SentimentAnalysis' onclick="SentimentAnalysis()">
-        <h2>Sentiment Analysis</h2>
-    </button> -->
+    <button id='SentimentAnalysis' onclick="SentimentAnalysis()">
+        <h4>Sentiment Analysis</h4>
+    </button>
     <button id='RenderChart' onclick="renderChart()">
         <h4>Render Chart</h4>
     </button>
     <button id='RenderChart2' onclick="renderStackedChart()">
-        <h4>Sentiment Analysis Chart</h4>
+        <h4>Render Sentiment Analysis Chart</h4>
     </button>
     <button id='RenderTweets' >
         <h4>Get Latest Tweets</h4>
@@ -104,7 +104,7 @@
     
     //document.write(keyword);
     //document.write(topic);
-    var url = 'http://cloud-native-python-example-app-amq-streams.apps.cluster-4375.4375.sandbox1652.opentlc.com'
+    var url = 'http://backend-amq-streams.apps.cluster-db23.db23.sandbox1764.opentlc.com'
     //var url = 'http://localhost:8080'
     var color = Chart.helpers.color
     var interval1, interval2, interval3, interval4
@@ -159,7 +159,7 @@
 
     function SentimentAnalysis() {
         let xml = new XMLHttpRequest()
-        xml.open("GET", `${url}/SentimentAnalysis${keywordString}&topic=${topic}`, true);
+        xml.open("GET", `${url}/apply_sentiment${keywordString}&topic=${topic}`, true);
         xml.onload = function (event) {
             console.log(event);
         };
@@ -235,6 +235,7 @@
             tweetsRendering()
         }, 5000)
     }
+
 
     function kafkaMongoRendering() {
         console.log('jordan: hi')

@@ -366,7 +366,7 @@ api.add_resource(kafka_to_mongodb, '/kafka_to_mongodb')
 api.add_resource(get_db_data1, '/get_db_data1')
 api.add_resource(get_db_data2, '/get_db_data2')
 api.add_resource(get_db_data3, '/get_db_data3')
-# api.add_resource(apply_sentiment, '/apply_sentiment')
+api.add_resource(apply_sentiment, '/apply_sentiment')
 
 producer = KafkaProducer(
     bootstrap_servers=bootstrap_servers,
