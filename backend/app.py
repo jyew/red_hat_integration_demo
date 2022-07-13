@@ -31,11 +31,11 @@ api = Api(app)
 parser = reqparse.RequestParser()
 
 # configure to be environment variable later
-bootstrap_servers = 'my-cluster-kafka-bootstrap.svc:9092'
+bootstrap_servers = 'my-cluster-kafka-bootstrap:9092'
 mongodb_host = 'mongodb:27017'
 sentiment_api = 'sentiment:8000'
 
-kafka_topic = 'tweets' #os.environ['KAFKA_TOPIC']
+kafka_topic = 'tweets'
 consumer_key = os.environ['TWTR_CONSUMER_KEY']
 consumer_secret = os.environ['TWTR_CONSUMER_SECRET']
 access_token = os.environ['TWTR_ACCESS_TOKEN']
