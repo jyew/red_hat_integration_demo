@@ -104,7 +104,7 @@
     
     //document.write(keyword);
     //document.write(topic);
-    var url = 'http://backend-amq-streams.apps.cluster-db23.db23.sandbox1764.opentlc.com'
+    var url = 'http://backend-amq-streams.apps.ocp.ws.local'
     //var url = 'http://localhost:8080'
     var color = Chart.helpers.color
     var interval1, interval2, interval3, interval4
@@ -151,6 +151,8 @@
     function TwitterToKafka() {
         let xml = new XMLHttpRequest()
         xml.open("GET", `${url}/twitter_to_kafka${keywordString}&topic=${topic}&seconds=10`, true);
+        xml.setRequestHeader("Access-Control-Allow-Origin", "*");
+        xml.setRequestHeader('Content-Type', 'application/xml');
         xml.onload = function (event) {
             console.log(event);
         };
@@ -160,6 +162,8 @@
     function SentimentAnalysis() {
         let xml = new XMLHttpRequest()
         xml.open("GET", `${url}/apply_sentiment${keywordString}&topic=${topic}`, true);
+        xml.setRequestHeader("Access-Control-Allow-Origin", "*");
+        xml.setRequestHeader('Content-Type', 'application/xml');
         xml.onload = function (event) {
             console.log(event);
         };
@@ -176,6 +180,8 @@
     function KafkaToMongo() {
         let xml = new XMLHttpRequest()
         xml.open("GET", `${url}/kafka_to_mongodb${keywordString}&topic=${topic}`, true);
+        xml.setRequestHeader("Access-Control-Allow-Origin", "*");
+        xml.setRequestHeader('Content-Type', 'application/xml');
         xml.onload = function (event) {
             console.log(event);
         };
@@ -189,6 +195,8 @@
         twoToneButton.classList.add('spinning');
         let xml = new XMLHttpRequest()
         xml.open("GET", `${url}/TwitterToKafka`, true);
+        xml.setRequestHeader("Access-Control-Allow-Origin", "*");
+        xml.setRequestHeader('Content-Type', 'application/xml');
         xml.onload = function (event) {
             console.log(event);
         };
@@ -208,6 +216,8 @@
             twoToneButton.classList.add('spinning');
             let xml = new XMLHttpRequest()
             xml.open("GET", `${url}/KafkaToMongoDB`, true);
+            xml.setRequestHeader("Access-Control-Allow-Origin", "*");
+        xml.setRequestHeader('Content-Type', 'application/xml');
             xml.onload = function (Event) {
                 console.log(event);
             };
@@ -240,8 +250,11 @@
     function kafkaMongoRendering() {
         console.log('jordan: hi')
         let response = {}
-        let xml = new XMLHttpRequest()
+        let xml = new XMLHttpRequest();
         xml.open("GET", `${url}/get_db_data1${keywordString}&topic=${topic}`, true);
+        xml.setRequestHeader("Access-Control-Allow-Origin", "*");
+        xml.setRequestHeader('Content-Type', 'application/xml');
+        
         xml.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
                 response = JSON.parse(this.responseText)
@@ -271,6 +284,8 @@
         let response = {}
         let xml = new XMLHttpRequest()
         xml.open("GET", `${url}/get_db_data2${keywordString}&topic=${topic}`, true);
+        xml.setRequestHeader("Access-Control-Allow-Origin", "*");
+        xml.setRequestHeader('Content-Type', 'application/xml');
         xml.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
                 response = JSON.parse(this.responseText)
@@ -312,6 +327,8 @@
         let response = {}
         let xml = new XMLHttpRequest()
         xml.open("GET", `${url}/get_db_data1${keywordString}`, true);
+        xml.setRequestHeader("Access-Control-Allow-Origin", "*");
+        xml.setRequestHeader('Content-Type', 'application/xml');
         xml.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
                 response = JSON.parse(this.responseText)
