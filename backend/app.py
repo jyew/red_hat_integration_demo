@@ -22,6 +22,7 @@ import time
 import datetime
 import pprint
 import requests
+import autodynatrace
 
 
 app = Flask(__name__)
@@ -30,18 +31,19 @@ api = Api(app)
 
 parser = reqparse.RequestParser()
 
-# configure to be environment variable later
-bootstrap_servers = 'my-cluster-kafka-bootstrap:9092'
-mongodb_host = 'mongodb:27017'
-sentiment_api = 'http://sentiment-amq-streams.apps.ocp.ws.local'
+# environment variables
+kafka_topic = os.environ['KAFKA_TOPIC'] # 'tweets' 
+bootstrap_servers = os.environ['KAFKA_BOOTSTRAP_ENDPOINT'] # 'my-cluster-kafka-bootstrap:9092'
+sentiment_api = os.environ['SENTIMENT_ROUTE'] # 'http://sentiment-amq-streams.apps.ocp.ws.local'
 
-kafka_topic = 'tweets'
+# twitter
 consumer_key = os.environ['TWTR_CONSUMER_KEY']
 consumer_secret = os.environ['TWTR_CONSUMER_SECRET']
 access_token = os.environ['TWTR_ACCESS_TOKEN']
 access_token_secret = os.environ['TWTR_ACCESS_TOKEN_SECRET']
 
 # mongo credentials
+mongodb_host = 'mongodb:27017'
 mongodb_user = os.environ['MONGODB_USER']
 mongodb_password = os.environ['MONGODB_PASSWORD']
 mongodb_db_name = os.environ['MONGODB_DATABASE']

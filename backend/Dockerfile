@@ -1,6 +1,7 @@
 FROM python:3.7.7-slim
 
 ENV PYTHONUNBUFFERED=1
+ENV AUTOWRAPT_BOOTSTRAP="autodynatrace"
 
 COPY * /opt/microservices/
 COPY requirements.txt /opt/microservices/
