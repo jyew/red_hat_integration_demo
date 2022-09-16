@@ -12,7 +12,7 @@ from pathlib import Path
 import numpy as np
 import torch
 import onnxruntime
-
+import autodynatrace
 
 app = Flask(__name__)
 CORS(app)

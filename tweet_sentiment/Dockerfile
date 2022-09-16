@@ -5,6 +5,7 @@ COPY requirements.txt /opt/microservices/
 COPY requirements.txt requirements.txt
 
 ENV TRANSFORMERS_CACHE="/opt/cache/tf_cache_home" 
+ENV AUTOWRAPT_BOOTSTRAP="autodynatrace"
 
 WORKDIR /opt/microservices/
 
