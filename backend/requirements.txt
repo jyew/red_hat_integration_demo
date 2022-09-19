@@ -3,12 +3,12 @@ itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
 pep8==1.7.1
-Flask==1.0
+Flask
 gunicorn==19.7.1
 cloudant==2.4.0
 flasgger==0.6.4
 Flask-Cors
-Flask-RESTful==0.3.6
+Flask-RESTful
 flask-restplus
 setuptools>=18.0
 cython
